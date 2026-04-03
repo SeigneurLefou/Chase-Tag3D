@@ -4,7 +4,7 @@ int main()
 {
 	int					socket_fd;
 	int					client_fd;
-	;
+	char				buffer[1024];
 
 	socket_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (socket_fd < 0)
@@ -22,12 +22,15 @@ int main()
 		perror(NULL);
 		return (1);
 	}
-	listen(socket_fd, 3);
-	client_fd = accept(socket_fd, NULL, NULL);
-    char buf[1024];
-    recv(client_fd, buf, 1024, 0);
-    printf("Reçu : %s\n", buf);
-    send(client_fd, "OK", 2, 0);
+	while (1)
+	{
+		listen(socket_fd, 3);
+		client_fd = accept(socket_fd, NULL, NULL);
+		recv(client_fd, buffer, 1024, 0);
+		printf("Reçu : %s\n", buffer);
+		send(client_fd, "OK", 3, 0);
+		bzero(buffer, 1024);
+	}
 	close(client_fd);
 	close(socket_fd);
 }
