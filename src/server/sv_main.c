@@ -5,6 +5,7 @@ int main()
 	int					socket_fd;
 	int					client_fd;
 	char				buffer[1024];
+	struct sockaddr		*cl_address;
 
 	socket_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (socket_fd < 0)

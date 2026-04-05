@@ -12,10 +12,12 @@ CL_OBJ = $(CL_SRC:%.c=$(OUTPUT_DIR)/%.o)
 SV_OBJ = $(SV_SRC:%.c=$(OUTPUT_DIR)/%.o)
 
 $(CL_NAME): $(OUT_DIRS) $(CL_OBJ)
-	@$(CC) $(CL_OBJ) $(CFLAGS) $(LDFLAGS) -o $@
+	mkdir -p $(BIN_DIR)
+	@$(CC) $(CL_OBJ) $(CFLAGS) $(LDFLAGS) -o $(BIN_DIR)$@
 
 $(SV_NAME): $(OUT_DIRS) $(SV_OBJ)
-	@$(CC) $(SV_OBJ) $(CFLAGS) $(LDFLAGS) -o $@
+	mkdir -p $(BIN_DIR)
+	@$(CC) $(SV_OBJ) $(CFLAGS) $(LDFLAGS) -o $(BIN_DIR)$@
 
 $(OUT_DIRS):
 	@mkdir -p $(OUT_DIRS)

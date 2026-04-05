@@ -1,6 +1,8 @@
 CL_NAME = client
 SV_NAME = server
 
+BIN_DIR = bin/
+
 OUTPUT_DIR = build
 
 SRC_DIR = src
