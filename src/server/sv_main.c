@@ -25,16 +25,24 @@ int main()
 		return (1);
 	}
 	listen(socket_fd, 3);
-	client_fd = accept(socket_fd, NULL, NULL);
+	bzero(buffer, 1024);
+	recv_size = 0;
+	client_fd = -1;
 	while (1)
 	{
+		if (recv_size <= 0)
+		{
+			if (client_fd > 2)
+				close(client_fd);
+			client_fd = accept(socket_fd, NULL, NULL);
+		}
+		else
+		{
+			printf("Reçu : [%s], size : %ld\n", buffer, recv_size);
+			bzero(buffer, 1024);
+			send(client_fd, "OK", 3, 0);
+		}
 		recv_size = recv(client_fd, buffer, 1024, 0);
-		printf("recv size [%ld]\n", recv_size);
-			perror("recv");
-		printf("Reçu : %s\n", buffer);
-		bzero(buffer, 1024);
-		send(client_fd, "OK", 3, 0);
 	}
-	close(client_fd);
 	close(socket_fd);
 }
