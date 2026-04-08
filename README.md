@@ -1,7 +1,7 @@
 # Fps3DCast
 ## Roadmap
 ### First step in networking
-- [ ] Client-server communication
+- [x] Client-server communication
 - [ ] List host client and simple client
 - [ ] Host connexion system
 - [ ] Client-Host request
