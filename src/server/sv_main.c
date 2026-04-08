@@ -5,7 +5,7 @@ int main()
 	int					socket_fd;
 	int					client_fd;
 	char				buffer[1024];
-	struct sockaddr		*cl_address;
+	// struct sockaddr		*cl_address;
 
 	socket_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (socket_fd < 0)
@@ -23,10 +23,10 @@ int main()
 		perror(NULL);
 		return (1);
 	}
+	listen(socket_fd, 3);
+	client_fd = accept(socket_fd, NULL, NULL);
 	while (1)
 	{
-		listen(socket_fd, 3);
-		client_fd = accept(socket_fd, NULL, NULL);
 		recv(client_fd, buffer, 1024, 0);
 		printf("Reçu : %s\n", buffer);
 		send(client_fd, "OK", 3, 0);
