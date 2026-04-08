@@ -27,10 +27,7 @@ int main(int argc, char **argv)
 	i = 1;
 	while (i < argc)
 	{
-		if (argv[i])
-			user_message = argv[i];
-		else
-			user_message = "nothing...";
+		user_message = argv[i];
 		send(socket_fd, user_message, strlen(user_message) + 1, 0);
 		bytes_recv = recv(socket_fd, buffer, 1024, 0);
 		if (bytes_recv <= 0)

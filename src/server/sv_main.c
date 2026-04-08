@@ -4,6 +4,7 @@ int main()
 {
 	int					socket_fd;
 	int					client_fd;
+	ssize_t				recv_size;
 	char				buffer[1024];
 	// struct sockaddr		*cl_address;
 
@@ -27,10 +28,12 @@ int main()
 	client_fd = accept(socket_fd, NULL, NULL);
 	while (1)
 	{
-		recv(client_fd, buffer, 1024, 0);
+		recv_size = recv(client_fd, buffer, 1024, 0);
+		printf("recv size [%ld]\n", recv_size);
+			perror("recv");
 		printf("Reçu : %s\n", buffer);
-		send(client_fd, "OK", 3, 0);
 		bzero(buffer, 1024);
+		send(client_fd, "OK", 3, 0);
 	}
 	close(client_fd);
 	close(socket_fd);
