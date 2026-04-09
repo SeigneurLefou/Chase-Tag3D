@@ -4,7 +4,7 @@ int main(int argc, char **argv)
 {
     int		socket_fd;
 	int		i;
-    char	buffer[1024];
+    char	buffer[1025];
 	char	*user_message;
 	int		bytes_recv;
 
@@ -25,6 +25,7 @@ int main(int argc, char **argv)
 		return (1);
 	}
 	i = 1;
+	bzero(buffer, 1025);
 	while (i < argc)
 	{
 		user_message = argv[i];
@@ -36,6 +37,7 @@ int main(int argc, char **argv)
 			break;
 		}
 		printf("Reçu : %s\n", buffer);
+		bzero(buffer, 1024);
 		i++;
 	}
     close(socket_fd);
