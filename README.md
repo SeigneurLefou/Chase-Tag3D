@@ -1,4 +1,22 @@
 # Fps3DCast
+## Install and execute
+Clone the repo with the following command
+```bash
+git clone https://github.com/SeigneurLefou/Chase-Tag3D && cd Chase-Tag3D
+```
+Compile the project with the following command
+```bash
+make re
+```
+Now you can execute the server in one terminal
+```bash
+./bin/server
+```
+
+And if you execute the client the server receive all the message
+```bash
+./bin/client We are multiple arguments
+```
 ## Roadmap
 ### First step in networking
 - [x] Client-server communication
