@@ -5,7 +5,7 @@ int main()
 	int					socket_fd;
 	int					client_fd;
 	ssize_t				recv_size;
-	char				buffer[1024];
+	char				buffer[1025];
 	// struct sockaddr		*cl_address;
 
 	socket_fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -25,7 +25,7 @@ int main()
 		return (1);
 	}
 	listen(socket_fd, 3);
-	bzero(buffer, 1024);
+	bzero(buffer, 1025);
 	recv_size = 0;
 	client_fd = -1;
 	while (1)
