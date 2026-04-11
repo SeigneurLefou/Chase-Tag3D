@@ -2,12 +2,13 @@
 
 int main()
 {
-	int		server_fd, client_fds[MAX_CLIENT], new_client;
-	int		max_fd;
-	ssize_t	recv_size;
-	char	buffer[BUFFER_SIZE];
-	fd_set	readfds;
-	int		sock;
+	int					server_fd, client_fds[MAX_CLIENT], new_client;
+	int					max_fd;
+	ssize_t				recv_size;
+	char				buffer[BUFFER_SIZE];
+	fd_set				readfds;
+	int					sock;
+	struct sockaddr_in	client_addr;
 
 	server_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (server_fd < 0)
@@ -31,7 +32,7 @@ int main()
 		return (1);
 	}
 	memset(buffer, 0, BUFFER_SIZE);
-	memset(client_fds, 0, MAX_CLIENT);
+	memset(client_fds, 0, MAX_CLIENT * sizeof(int));
 	while (1)
 	{
 		FD_ZERO(&readfds);
@@ -46,34 +47,33 @@ int main()
 					max_fd = client_fds[i];
 			}
 		}
-		if (select(max_fd + 1, &readfds, NULL, NULL, NULL)< 0)
+		if (select(max_fd + 1, &readfds, NULL, NULL, NULL) < 0)
 		{
 			perror("select");
 			exit(1);
 		}
 		if (FD_ISSET(server_fd, &readfds))
 		{
-            struct sockaddr_in client_addr;
-            socklen_t client_len = sizeof(client_addr);
-
-            new_socket = accept(server_fd, (struct sockaddr*)&client_addr, &client_len);
-            if (new_socket < 0) {
-                perror("accept");
-                continue;
-            }
-
-            // Ajoute le nouveau socket à la liste des clients
-            for (int i = 0; i < MAX_CLIENTS; i++) {
-                if (client_fds[i] == 0) {
-                    client_fds[i] = new_socket;
-                    printf("Nouveau client connecté (fd=%d, IP=%s, Port=%d)\n",
-                           new_socket,
-                           inet_ntoa(client_addr.sin_addr),
-                           ntohs(client_addr.sin_port));
-                    break;
-                }
-            }
-        }
+			socklen_t client_len = sizeof(client_addr);
+			new_client = accept(server_fd, (struct sockaddr*)&client_addr, &client_len);
+			if (new_client < 0)
+			{
+				perror("accept");
+				continue;
+			}
+			for (int i = 0; i < MAX_CLIENT; i++)
+			{
+				if (client_fds[i] == 0)
+				{
+					client_fds[i] = new_client;
+					printf("Nouveau client connecté (fd=%d, IP=%s, Port=%d)\n",
+						   new_client,
+						   inet_ntoa(client_addr.sin_addr),
+						   ntohs(client_addr.sin_port));
+					break;
+				}
+			}
+		}
 		for (int i = 0; i < MAX_CLIENT; i++)
 		{
 			sock = client_fds[i];
@@ -91,7 +91,7 @@ int main()
 				}
 				else
 				{
-					printf("Reçu de %d : %s\n", sock, buffer);
+					printf("Reçu de %d : %s", sock, buffer);
 					if (send(sock, "OK", 3, 0) < 0)
 					{
 						perror("send");
