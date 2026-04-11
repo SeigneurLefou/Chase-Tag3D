@@ -4,6 +4,7 @@ int main(int argc, char **argv)
 {
     int		socket_fd;
 	int		i;
+	int		j;
     char	buffer[1025];
 	char	*user_message;
 	int		bytes_recv;
@@ -16,7 +17,7 @@ int main(int argc, char **argv)
 	}
     struct sockaddr_in	addr = {
 		.sin_family = AF_INET,
-		.sin_port = htons(4269),
+		.sin_port = htons(PORT),
 		.sin_addr.s_addr = inet_addr("127.0.0.1") };
 	if (connect(socket_fd, (void*)&addr, sizeof(addr)))
 	{
@@ -25,20 +26,27 @@ int main(int argc, char **argv)
 		return (1);
 	}
 	i = 1;
+	j = 0;
 	bzero(buffer, 1025);
-	while (i < argc)
+	while (j < 20)
 	{
-		user_message = argv[i];
-		send(socket_fd, user_message, strlen(user_message) + 1, 0);
-		bytes_recv = recv(socket_fd, buffer, 1024, 0);
-		if (bytes_recv <= 0)
+		while (i < argc)
 		{
-			perror("recv");
-			break;
+			user_message = argv[i];
+			send(socket_fd, user_message, strlen(user_message) + 1, 0);
+			bytes_recv = recv(socket_fd, buffer, 1024, 0);
+			if (bytes_recv <= 0)
+			{
+				perror("recv");
+				break;
+			}
+			printf("Reçu : %s\n", buffer);
+			bzero(buffer, 1024);
+			i++;
 		}
-		printf("Reçu : %s\n", buffer);
-		bzero(buffer, 1024);
-		i++;
+		usleep(1000000);
+		j++;
+		i = 1;
 	}
     close(socket_fd);
 }
