@@ -1,7 +1,9 @@
 CPP := g++
 SHELL := /bin/bash
 
-LDFLAGS := -L src/lib
+LDFLAGS :=
+
+BIN = bin/
 
 ifndef DEBUG
 	CFLAGS := -Wall -Wextra -Werror -MD -MP
@@ -24,13 +26,16 @@ mclient: $(CL_NAME)
 mserver: $(SV_NAME)
 
 $(CL_NAME): $(OUT_DIRS) $(CL_OBJ)
-	$(CPP) $(CL_OBJ) $(LDFLAGS) -I$(INCLUDES) $(CFLAGS) -o $@
+	mkdir -p $(BIN)
+	$(CPP) $(CL_OBJ) $(LDFLAGS) -I$(INCLUDES) $(CFLAGS) -o $(BIN)$@
 
 $(SV_NAME): $(OUT_DIRS) $(SV_OBJ)
-	$(CPP) $(SV_OBJ) $(LDFLAGS) -I$(INCLUDES) $(CFLAGS) -o $@
+	mkdir -p $(BIN)
+	$(CPP) $(SV_OBJ) $(LDFLAGS) -I$(INCLUDES) $(CFLAGS) -o $(BIN)$@
 
 $(WD_NAME): $(OUT_DIRS) $(WD_OBJ)
-	$(CPP) $(WD_OBJ) $(LDFLAGS) -I$(INCLUDES) $(CFLAGS) -o $@
+	mkdir -p $(BIN)
+	$(CPP) $(WD_OBJ) $(LDFLAGS) -I$(INCLUDES) $(CFLAGS) -o $(BIN)$@
 
 $(OUT_DIRS):
 	mkdir -p $(OUT_DIRS)
@@ -42,9 +47,7 @@ clean:
 	rm -rf $(OUTPUT_DIR)
 
 fclean: clean
-	rm -f $(CL_NAME)
-	rm -f $(SV_NAME)
-	rm -f $(WD_NAME)
+	rm -rf $(BIN)
 
 re: fclean all
 
