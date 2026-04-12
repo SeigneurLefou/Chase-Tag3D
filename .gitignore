@@ -35,6 +35,10 @@
 *.i*86
 *.x86_64
 *.hex
+server
+window
+client
+build/
 
 # Debug files
 *.dSYM/

@@ -1,7 +1,7 @@
-#ifndef SERVER_H
-# define SERVER_H
+#ifndef CLIENT_H
+# define CLIENT_H
 
-# include <stdio.h>
+# include <iostream>
 # include <stdlib.h>
 # include <sys/socket.h>
 # include <sys/wait.h>

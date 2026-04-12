@@ -1,5 +1,7 @@
-CC := cc
+CPP := g++
 SHELL := /bin/bash
+
+LDFLAGS := -L src/lib
 
 ifndef DEBUG
 	CFLAGS := -Wall -Wextra -Werror -MD -MP
@@ -11,21 +13,30 @@ CL_OBJ = $(CL_SRC:%.c=$(OUTPUT_DIR)/%.o)
 
 SV_OBJ = $(SV_SRC:%.c=$(OUTPUT_DIR)/%.o)
 
-all: $(CL_NAME) $(SV_NAME)
+WD_OBJ = $(WD_SRC:%.c=$(OUTPUT_DIR)/%.o)
+
+all: mclient mserver
+
+mwindow: $(WD_NAME)
+
+mclient: $(CL_NAME)
+
+mserver: $(SV_NAME)
 
 $(CL_NAME): $(OUT_DIRS) $(CL_OBJ)
-	mkdir -p $(BIN_DIR)
-	$(CC) $(CL_OBJ) $(CFLAGS) -o $(BIN_DIR)$@
+	$(CPP) $(CL_OBJ) $(LDFLAGS) -I$(INCLUDES) $(CFLAGS) -o $@
 
 $(SV_NAME): $(OUT_DIRS) $(SV_OBJ)
-	mkdir -p $(BIN_DIR)
-	$(CC) $(SV_OBJ) $(CFLAGS) -o $(BIN_DIR)$@
+	$(CPP) $(SV_OBJ) $(LDFLAGS) -I$(INCLUDES) $(CFLAGS) -o $@
+
+$(WD_NAME): $(OUT_DIRS) $(WD_OBJ)
+	$(CPP) $(WD_OBJ) $(LDFLAGS) -I$(INCLUDES) $(CFLAGS) -o $@
 
 $(OUT_DIRS):
 	mkdir -p $(OUT_DIRS)
 
 $(OUTPUT_DIR)/%.o: %.c
-	$(CC) $(CFLAGS) -I$(INCLUDES) -o $@ -c $<
+	$(CPP) $(LDFLAGS) $(CFLAGS) -I$(INCLUDES) -o $@ -c $<
 
 clean:
 	rm -rf $(OUTPUT_DIR)
@@ -33,6 +44,7 @@ clean:
 fclean: clean
 	rm -f $(CL_NAME)
 	rm -f $(SV_NAME)
+	rm -f $(WD_NAME)
 
 re: fclean all
 

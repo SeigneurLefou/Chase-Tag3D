@@ -1,7 +1,7 @@
 #ifndef SERVER_H
 # define SERVER_H
 
-# include <stdio.h>
+# include <iostream>
 # include <sys/socket.h>
 # include <sys/select.h>
 # include <netinet/in.h>
