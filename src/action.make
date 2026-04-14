@@ -1,7 +1,7 @@
 CPP := g++
 SHELL := /bin/bash
 
-LDFLAGS :=
+LDFLAGS := -lSDL3
 
 BIN = bin/
 
@@ -17,7 +17,7 @@ SV_OBJ = $(SV_SRC:%.c=$(OUTPUT_DIR)/%.o)
 
 WD_OBJ = $(WD_SRC:%.c=$(OUTPUT_DIR)/%.o)
 
-all: mclient mserver
+all: mwindow
 
 mwindow: $(WD_NAME)
 

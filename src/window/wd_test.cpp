@@ -1,26 +1,34 @@
-#include "wd_test.h"
+#include "wd_test.hpp"
 
 int main()
 {
-	SDL_Window	*window; 
-	if (SDL_Init(SDL_INIT_VIDEO) != 0)
+	bool		is_running;
+	SDL_Window*	window;
+	SDL_Event	event;
+
+	if (!SDL_Init(SDL_INIT_VIDEO))
 	{
-		fprintf(stderr, "error initializing SDL: %s\n", SDL_GetError());
 		return (EXIT_FAILURE);
 	}
-	window = SDL_CreateWindow("Window",
-						SDL_WINDOWPOS_CENTERED,
-						SDL_WINDOWPOS_CENTERED,
-						640, 480,
-						SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_FULLSCREEN_DESKTOP);
-	if (NULL == window)
+	window = SDL_CreateWindow(
+		"Hello Window", 800, 300,
+		0
+	);
+	if (!window)
 	{
-		fprintf(stderr, "Erreur SDL_CreateWindow : %s", SDL_GetError());
-		return EXIT_FAILURE;
+		perror("window");
+		return (EXIT_FAILURE);
 	}
-	while (1)
-		;
-    SDL_DestroyWindow(window);
+	is_running = true;
+	while (is_running)
+	{
+		while (SDL_PollEvent(&event))
+		{
+			if (event.type == SDL_EVENT_QUIT)
+				is_running = false;
+		}
+	}
+	SDL_DestroyWindow(window);
 	SDL_Quit();
 	return (EXIT_SUCCESS);
 }
