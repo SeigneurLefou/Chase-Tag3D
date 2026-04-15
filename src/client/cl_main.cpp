@@ -1,13 +1,18 @@
 #include "client.hpp"
 
-int main()
+int main(int argc, char **argv)
 {
 	int					socket_fd;
 	char				buffer[1024];
 	char				user_message[1024];
 	int					bytes_recv;
 	struct sockaddr_in	addr;
+	std::string			ip_str;
 
+	if (argc > 1)
+		ip_str = argv[1];
+	else
+		ip_str = "127.0.0.1";
 	socket_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (socket_fd < 0)
 	{
@@ -16,7 +21,7 @@ int main()
 	}
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(PORT);
-	addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+	addr.sin_addr.s_addr = inet_addr(ip_str.c_str());
 	if (connect(socket_fd, (struct sockaddr*)&addr, sizeof(addr)))
 	{
 		perror("connect");
