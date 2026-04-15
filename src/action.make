@@ -17,7 +17,7 @@ SV_OBJ = $(SV_SRC:%.c=$(OUTPUT_DIR)/%.o)
 
 WD_OBJ = $(WD_SRC:%.c=$(OUTPUT_DIR)/%.o)
 
-all: mserver mclient
+all: mwindow
 
 mwindow: $(WD_NAME)
 
