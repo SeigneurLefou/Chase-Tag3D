@@ -1,7 +1,7 @@
 CPP := g++
 SHELL := /bin/bash
 
-LDFLAGS := #-lSDL3
+LDFLAGS := -lSDL3
 
 BIN = bin/
 
