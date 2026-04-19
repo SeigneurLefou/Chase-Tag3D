@@ -5,17 +5,16 @@ void	render_game(Game game, Player player, vector<string> map)
 	int			square_size;
 	SDL_FRect	square;
 
-	square_size = min(game.screen_height / game.map_height, game.screen_width / game.map_width);
 	square.x = 0;
 	square.y = 0;
-	square.w = square_size;
-	square.h = square_size;
-	for (size_t y = 0; y < game.map_height; y++)
+	square.w = game.square_size;
+	square.h = game.square_size;
+	for (int y = 0; y < game.map_height; y++)
 	{
-		square.y = y * square_size;
-		for (size_t x = 0; x < game.map_width; x++)
+		square.y = y * game.square_size + game.center_offset;
+		for (int x = 0; x < game.map_width; x++)
 		{
-			square.x = x * square_size;
+			square.x = x * game.square_size + game.center_offset;
 			switch (map[y][x])
 			{
 				case 1:
@@ -27,7 +26,7 @@ void	render_game(Game game, Player player, vector<string> map)
 			SDL_RenderFillRect(game.renderer, &square);
 		}
 	}
-	player.render(game, square_size);
+	player.render(game);
 }
 
 int main()
@@ -47,15 +46,18 @@ int main()
 		{0, 0, 0, 0, 0, 0, 0},
 	};
 
-	if (game.init(800, 800) == FAILURE)
+	if (game.init(1000, 1000) == FAILURE)
 		return (FAILURE);
 	game.map_width = 7;
 	game.map_height = 7;
-	if (player.init(game.map_width / 2, game.map_height / 2) == FAILURE)
+	game.square_size = min(game.screen_height / game.map_height, game.screen_width / game.map_width);
+	game.normalize_screen_size();
+	game.center_offset = min(game.screen_width - game.map_width * game.square_size, game.screen_height - game.map_height * game.square_size) / 2;
+	if (player.init((game.map_width) / 2 * game.square_size, game.map_height / 2 * game.square_size) == FAILURE)
 		return (FAILURE);
-	for (size_t y = 0; y < game.map_height; y++)
+	for (int y = 0; y < game.map_height; y++)
 	{
-		for (size_t x = 0; x < game.map_width; x++)
+		for (int x = 0; x < game.map_width; x++)
 		{
 			line.push_back(manual_map[y][x]);
 		}
@@ -69,15 +71,9 @@ int main()
 			if (event.type == SDL_EVENT_QUIT)
 				game.is_running = false;
 			if (event.type == SDL_EVENT_KEY_DOWN)
-			{
-				cout << "Key : " << event.key.scancode << endl;
 				game.key_table[event.key.scancode] = 1;
-			}
 			if (event.type == SDL_EVENT_KEY_UP)
-			{
-				cout << "Key : " << event.key.scancode << endl;
 				game.key_table[event.key.scancode] = 0;
-			}
 		}
 		player.key_move(game, map);
 		game.key_hook();
