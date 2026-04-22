@@ -1,16 +1,16 @@
 #include "server.hpp"
 
-bool	sv_main()
+int main()
 {
     GameServer  server;
 
     if (!server.init())
     {
-        return (FAILURE);
+        return (1);
     }
 
     cout << "Server on port " << PORT << endl;
-    server.run_network();
+    server.runNetwork();
 
-    return (SUCCESS);
+    return (0);
 }
