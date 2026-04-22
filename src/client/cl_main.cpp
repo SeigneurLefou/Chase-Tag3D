@@ -1,52 +1,46 @@
 #include "client.hpp"
 
+string get_server_ip(int argc, char **argv) {
+    return (argc > 1) ? argv[1] : "127.0.0.1";
+}
+
 int main(int argc, char **argv)
 {
-	int					socket_fd;
-	char				buffer[1024];
-	char				user_message[1024];
-	int					bytes_recv;
-	struct sockaddr_in	addr;
-	std::string			ip_str;
+    GameClient	client;
+    char		buffer[BUFFER_SIZE];
+    char		user_input[BUFFER_SIZE];
+	string		msg;
 
-	if (argc > 1)
-		ip_str = argv[1];
-	else
-		ip_str = "127.0.0.1";
-	socket_fd = socket(AF_INET, SOCK_STREAM, 0);
-	if (socket_fd < 0)
+    if (!client.connectToServer(get_server_ip(argc, argv))) {
+        return EXIT_FAILURE;
+    }
+
+    cout << "Connected to the server, enter your input :" << endl;
+
+    while (client.is_connected())
 	{
-		perror(NULL);
-		return (1);
-	}
-	addr.sin_family = AF_INET;
-	addr.sin_port = htons(PORT);
-	addr.sin_addr.s_addr = inet_addr(ip_str.c_str());
-	if (connect(socket_fd, (struct sockaddr*)&addr, sizeof(addr)))
-	{
-		perror("connect");
-		close(socket_fd);
-		return (1);
-	}
-	bzero(buffer, 1024);
-	bzero(user_message, 1024);
-	while (1)
-	{
-		fgets(user_message, 1024, stdin);
-		if (send(socket_fd, user_message, strlen(user_message) + 1, 0) < 0)
+        if (fgets(user_input, BUFFER_SIZE, stdin))
 		{
-			perror("send");
+			client.disconnect();
 			break;
 		}
-		bytes_recv = recv(socket_fd, buffer, 1023, 0);
-		if (bytes_recv <= 0)
+        msg = user_input;
+        if (!msg.empty() && msg.back() == '\n')
+			msg.pop_back();
+        if (client.is_connected() && !client.sendInput(msg))
 		{
-			perror("recv");
+			client.disconnect();
 			break;
 		}
-		std::cout << "Reçu :" << buffer << std::endl;
-		bzero(buffer, 1024);
-		bzero(user_message, 1024);
-	}
-	close(socket_fd);
+
+        if (client.is_connected() && client.receiveUpdate(buffer, BUFFER_SIZE) <= 0)
+		{
+            cout << "Serveur disconnected." << endl;
+			client.disconnect();
+			break;
+		}
+        if (client.is_connected())
+			cout << "Receive : " << buffer << endl;
+    }
+    return EXIT_SUCCESS;
 }

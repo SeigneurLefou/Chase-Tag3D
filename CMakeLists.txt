@@ -16,10 +16,12 @@ target_link_libraries(window PRIVATE SDL3::SDL3)
 
 set(SERVER_SOURCES 
     src/server/sv_main.cpp
+    src/server/server.cpp
 )
 add_executable(server ${SERVER_SOURCES})
 
 set(CLIENT_SOURCES 
     src/client/cl_main.cpp
+	src/client/client.cpp
 )
 add_executable(client ${CLIENT_SOURCES})
