@@ -14,7 +14,6 @@ set(SERVER_SOURCES
     src/server/main.cpp
     src/utils/server.cpp
     src/utils/player.cpp
-	src/utils/main.cpp
 	src/utils/map.cpp
 	src/utils/game.cpp
 )

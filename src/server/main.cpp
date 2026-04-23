@@ -2,33 +2,33 @@
 
 int main()
 {
-    Game			game;
-    Map				map;
+	Game			game;
+	Map				map;
 	vector<Player>	players;
 	Player			tmp_player;
 
-    if (!game.init(800, 600)) return FAILURE;
-    map.init(800, 600);
+	map.init(16, 16);
+	if (!game.init(map, 800, 800)) return FAILURE;
 
-	tmp_player.init(0, 400, 400);
-	players.push_back
+	tmp_player.init(0, 0, 0);
+	players.push_back(tmp_player);
 
-    while (game.is_running)
-    {
-        game.handle_events(); 
-        
-        localPlayer.key_move(game.key_table, game.screen_width, game.screen_height);
-        game.key_hook();
+	while (game.is_running)
+	{
+		game.handle_events(players[0]);
+		
+		for (size_t i=0; i < players.size(); i++)
+			players[i].key_move(map, game.square_size);
 
-        SDL_SetRenderDrawColor(game.renderer, 16, 16, 16, 255);
-        SDL_RenderClear(game.renderer);
-        
-        map.render(game.renderer, game.square_size);
-		for (size_t i=0; players[i]; i++)
-        	players.render(game.renderer, game.square_size);
-        
-        SDL_RenderPresent(game.renderer);
-        SDL_Delay(16);
-    }
-    return SUCCESS;
+		SDL_SetRenderDrawColor(game.renderer, 16, 16, 16, 255);
+		SDL_RenderClear(game.renderer);
+		
+		map.render(game.renderer, game.square_size);
+		for (size_t i=0; i < players.size(); i++)
+			players[i].render(game.renderer, game.square_size);
+		
+		SDL_RenderPresent(game.renderer);
+		SDL_Delay(16);
+	}
+	return SUCCESS;
 }

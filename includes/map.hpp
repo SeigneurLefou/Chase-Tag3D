@@ -1,6 +1,8 @@
 #ifndef MAP_HPP
 #define MAP_HPP
 
+#include "utils.hpp"
+
 class Map 
 {
     public:
@@ -8,7 +10,7 @@ class Map
         int width, height;
 
 		void	init(int w, int h);
-        void	render(SDL_Renderer* renderer, int square_size);
+        void	render(SDL_Renderer *renderer, int square_size);
 };
 
 #endif

@@ -1,17 +1,17 @@
 #include "game.hpp"
 
-bool	Game::init(int sw, int sh)
+bool	Game::init(Map &map, int w, int h)
 {
-	memset(key_table, 0, SDL_SCANCODE_COUNT);
-	screen_width = sw;
-	screen_height = sh;
+	width = w;
+	height = h;
+	square_size = min(w, h) / min(map.width, map.height);
 	if (!SDL_Init(SDL_INIT_VIDEO))
 	{
 		SDL_Log("SDL_Init : %s", SDL_GetError());
 		return (FAILURE);
 	}
 	window = SDL_CreateWindow(
-		"Window", sw, sh, 0
+		"Window", w, h, 0
 	);
 	if (!window)
 	{
@@ -28,30 +28,17 @@ bool	Game::init(int sw, int sh)
 	return (SUCCESS);
 }
 
-void	Game::key_hook()
+void Game::handle_events(Player &player)
 {
-	if (key_table[SDL_SCANCODE_ESCAPE])
-		is_running = false;
-}
+	SDL_Event event;
+	while (SDL_PollEvent(&event))
+	{
+		if (event.type == SDL_EVENT_QUIT) is_running = false;
+		if (event.key.scancode == SDL_SCANCODE_ESCAPE) is_running = false;
 
-void	Game::normalize_screen_size()
-{
-	screen_width = map_width * square_size;
-	screen_height = map_height * square_size;
-}
-
-bool	Game::resize_window()
-{
-	return (SDL_SetWindowSize(window, screen_width, screen_height));
-}
-
-void Game::handle_events()
-{
-    SDL_Event event;
-    while (SDL_PollEvent(&event))
-    {
-        if (event.type == SDL_EVENT_QUIT) is_running = false;
-        if (event.type == SDL_EVENT_KEY_DOWN) key_table[event.key.scancode] = true;
-        if (event.type == SDL_EVENT_KEY_UP) key_table[event.key.scancode] = false;
-    }
+		if (event.type == SDL_EVENT_KEY_DOWN)
+			player.key_table[event.key.scancode] = true;
+		if (event.type == SDL_EVENT_KEY_UP)
+			player.key_table[event.key.scancode] = false;
+	}
 }
