@@ -39,16 +39,3 @@ The client request to the server are the following :
 GET for pull info like host list
 POST for push info
 CONNECT to connect to an account
-
-### Gamemode :
-- Chase tag
-- Catch the flags
-- Zone capture
-- Dual team
-- Battle royal
-### Theme of the game :
-- Egypt
-- Infernum
-- Gore
-- Catacombs
-- Dark fantasy
