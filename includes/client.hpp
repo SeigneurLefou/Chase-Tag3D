@@ -16,18 +16,19 @@
 
 class GameClient {
 public:
-    GameClient();
-    ~GameClient();
+	GameClient();
+	~GameClient();
 
-    bool    connectToServer(const string ip);
-    void    disconnect();
-    bool    sendInput(const string message);
-    int     receiveUpdate(char* buffer, size_t size);
+	bool	connectToServer(const string ip);
+	void	disconnect();
+	bool	sendInput(const string message);
+	int		receiveUpdate(char* buffer, size_t size);
 	bool	is_connected();
-    
+	int		key_hook();
+	
 private:
-    int     _socket_fd;
-    bool    _is_connected;
+	int	 _socket_fd;
+	bool	_is_connected;
 };
 
 #endif

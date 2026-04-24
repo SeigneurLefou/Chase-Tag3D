@@ -15,10 +15,10 @@ int main()
 
 	while (game.is_running)
 	{
-		game.handle_events(players[0]);
-		
-		for (size_t i=0; i < players.size(); i++)
-			players[i].key_move(map, game.square_size);
+		game.handle_events();
+		// game.handle_events(players[0]);
+		// for (size_t i=0; i < players.size(); i++)
+			// players[i].key_move(map, game.square_size);
 
 		SDL_SetRenderDrawColor(game.renderer, 16, 16, 16, 255);
 		SDL_RenderClear(game.renderer);

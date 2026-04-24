@@ -15,7 +15,7 @@ class Game
 		int				square_size;
 		bool			is_running;
 		bool			init(Map &map, int sw, int sh);
-		void			handle_events(Player &player);
+		void			handle_events(); // Player &player);
 };
 
 #endif

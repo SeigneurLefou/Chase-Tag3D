@@ -13,19 +13,19 @@
 class GameServer
 {
 public:
-    GameServer();
-    ~GameServer();
+	GameServer();
+	~GameServer();
 
-    bool    init();
-    void    run_network();
-    void    stop();
+	bool	init();
+	void	run_network();
+	void	stop();
 
 private:
-    int     _server_fd;
-    int     _client_fds[MAX_CLIENT];
-    bool    _is_running;
+	int		_server_fd;
+	int		_client_fds[MAX_CLIENT];
+	bool	_is_running;
 
-    void    _handle_new_connection();
-    void    _handle_client_data(int index);
+	void	_handle_new_connection();
+	void	_handle_client_data(int index);
 };
 #endif
