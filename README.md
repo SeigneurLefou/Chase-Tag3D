@@ -39,9 +39,24 @@ Phase 3: Network Synchronization
 * **CMake**
 
 ### Compilation
-To build both the **Client** and **Server**, run:
+Create the build directory with the following command
 ```bash
-make all
+mkdir build
+```
+If SDL3 was install on your computer you can compile prepare the compilation with this script
+```
+cmake -S . -B build
+```
+Else you need to install SDl in this folder but don't worry, this script do all of this
+```
+mkdir lib
+git clone https://github.com/libsdl-org/SDL.git lib/SDL
+cmake -S . -B build -DNOSDL=ON
+```
+
+To build both the **Client** and **Server**, run this in the root of the project
+```bash
+cmake --build build
 ```
 
 ### Running the Project
