@@ -28,18 +28,12 @@ bool	Game::init(Map &map, int w, int h)
 	return (SUCCESS);
 }
 
-void Game::handle_events() // Player &player)
+void Game::handle_events()
 {
 	SDL_Event event;
 	while (SDL_PollEvent(&event))
 	{
 		if (event.type == SDL_EVENT_QUIT) is_running = false;
 		if (event.key.scancode == SDL_SCANCODE_ESCAPE) is_running = false;
-/*
-		if (event.type == SDL_EVENT_KEY_DOWN)
-			player.key_table[event.key.scancode] = true;
-		if (event.type == SDL_EVENT_KEY_UP)
-			player.key_table[event.key.scancode] = false;
-*/
 	}
 }

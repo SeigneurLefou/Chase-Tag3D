@@ -11,7 +11,6 @@ include_directories(includes)
 
 set(SERVER_SOURCES 
     src/server/sv_main.cpp
-    src/server/main.cpp
     src/utils/server.cpp
     src/utils/player.cpp
 	src/utils/map.cpp
@@ -22,7 +21,7 @@ target_link_libraries(server PRIVATE SDL3::SDL3)
 
 set(CLIENT_SOURCES 
     src/client/cl_main.cpp
-	src/client/client.cpp
+	src/utils/client.cpp
 )
 add_executable(client ${CLIENT_SOURCES})
 target_link_libraries(client PRIVATE SDL3::SDL3)

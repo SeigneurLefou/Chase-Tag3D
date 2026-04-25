@@ -1,8 +1,7 @@
 #include "player.hpp"
 
-bool	Player::init(int fd, int px, int py)
+bool	Player::init(int px, int py)
 {
-	id = fd;
 	posx = px;
 	posy = py;
 	memset(key_table, 0, SDL_SCANCODE_COUNT * sizeof(bool));

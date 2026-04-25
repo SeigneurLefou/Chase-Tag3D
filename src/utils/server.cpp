@@ -1,18 +1,18 @@
 #include "server.hpp"
 
-GameServer::GameServer()
+Server::Server()
 {
 	_server_fd = -1;
 	_is_running = false;
 	memset(_client_fds, 0, sizeof(_client_fds));
 }
 
-GameServer::~GameServer()
+Server::~Server()
 {
 	stop();
 }
 
-bool GameServer::init()
+bool Server::init()
 {
 	struct sockaddr_in  addr;
 	int					opt = 1;
@@ -46,7 +46,7 @@ bool GameServer::init()
 	return (true);
 }
 
-void GameServer::_handle_new_connection()
+void Server::_handle_new_connection(unordered_map<int, Player> &players, mutex &p_mutex)
 {
 	struct sockaddr_in  client_addr;
 	socklen_t		   client_len = sizeof(client_addr);
@@ -59,11 +59,14 @@ void GameServer::_handle_new_connection()
 		return;
 	}
 
+	lock_guard<mutex>	lock(p_mutex);
 	for (int i = 0; i < MAX_CLIENT; i++)
 	{
 		if (_client_fds[i] == 0)
 		{
 			_client_fds[i] = new_client;
+			players[new_client] = Player();
+			players[new_client].init(0, 0);
 			cout << "Client connected : fd=" << new_client << endl;
 			return;
 		}
@@ -71,33 +74,35 @@ void GameServer::_handle_new_connection()
 	close(new_client);
 }
 
-void GameServer::_handle_client_data(int index)
+void Server::_handle_client_data(int index, unordered_map<int, Player> &players, mutex &p_mutex)
 {
 	char	buffer[BUFFER_SIZE];
-	int	 sock = _client_fds[index];
-	ssize_t n;
+	int	 	sock = _client_fds[index];
+	ssize_t	n;
 
 	memset(buffer, 0, BUFFER_SIZE);
 	n = recv(sock, buffer, BUFFER_SIZE - 1, 0);
 
+	lock_guard<mutex>	lock(p_mutex);
 	if (n <= 0)
 	{
 		if (n == 0)
 			cout << "Client " << sock << " deconnected." << endl;
 		else
 			perror("recv");
-		
+		players.erase(sock);
 		close(sock);
 		_client_fds[index] = 0;
 	}
 	else
 	{
-		cout << "Receive from " << sock << " : " << buffer << endl;
+		cout << "Receive from " << sock << endl;
+		memcpy(players[sock].key_table, buffer, SDL_SCANCODE_COUNT * sizeof(bool));
 		send(sock, "OK", 3, 0);
 	}
 }
 
-void GameServer::run_network()
+void Server::run_network(unordered_map<int, Player> &players, mutex &p_mutex)
 {
 	fd_set  readfds;
 	int	 max_fd;
@@ -126,20 +131,20 @@ void GameServer::run_network()
 
 		if (FD_ISSET(_server_fd, &readfds))
 		{
-			_handle_new_connection();
+			_handle_new_connection(players, p_mutex);
 		}
 
 		for (int i = 0; i < MAX_CLIENT; i++)
 		{
 			if (_client_fds[i] > 0 && FD_ISSET(_client_fds[i], &readfds))
 			{
-				_handle_client_data(i);
+				_handle_client_data(i, players, p_mutex);
 			}
 		}
 	}
 }
 
-void GameServer::stop()
+void Server::stop()
 {
 	_is_running = false;
 	if (_server_fd != -1)

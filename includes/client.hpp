@@ -14,21 +14,24 @@
 #define PORT 8080
 #define BUFFER_SIZE 1024
 
-class GameClient {
+class Client {
 public:
-	GameClient();
-	~GameClient();
+	Client();
+	~Client();
 
-	bool	connectToServer(const string ip);
-	void	disconnect();
-	bool	sendInput(const string message);
-	int		receiveUpdate(char* buffer, size_t size);
-	bool	is_connected();
-	int		key_hook();
+	SDL_Window		*window;
+	SDL_Renderer	*renderer;
+	bool			key_table[SDL_SCANCODE_COUNT];
+	bool			connectToServer(const string ip);
+	void			disconnect();
+	bool			sendInput();
+	int				receiveUpdate(char* buffer, size_t size);
+	bool			is_connected();
+	int				key_hook();
 	
 private:
-	int	 _socket_fd;
-	bool	_is_connected;
+	int				_socket_fd;
+	bool			_is_connected;
 };
 
 #endif
