@@ -59,6 +59,12 @@ To build both the **Client** and **Server**, run this in the root of the project
 cmake --build build
 ```
 
+### Launch game programs
+- You need to access the 'build' directory
+```bash
+   cd build
+```
+
 ### Running the Project
 1. **Start the Server:**
    ```bash
