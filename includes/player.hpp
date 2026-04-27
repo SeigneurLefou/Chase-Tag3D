@@ -11,7 +11,7 @@ class Player
 		int		posx;
 		int		posy;
 		bool	key_table[SDL_SCANCODE_COUNT];
-		bool	init(int fd, int px, int py);
+		bool	init(int px, int py);
 		bool	render(SDL_Renderer *renderer, int square_size);
 		void	key_move(Map &map, int square_size);
 };
